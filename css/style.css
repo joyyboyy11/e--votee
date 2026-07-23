@@ -1,0 +1,300 @@
+/* =========================================================
+   E-VOTE — Design tokens
+   Sujet : scrutin institutionnel sénégalais.
+   Signature : le "sceau" circulaire (tampon de validation)
+   qui réapparaît à chaque étape clé (bouton de vote,
+   confirmation, badge de statut).
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root{
+  /* Couleurs */
+  --papier:        #FAF7F0;
+  --papier-ombre:  #F1ECDF;
+  --encre:         #1C2541;
+  --encre-douce:   #3A4568;
+  --or:            #C9A227;
+  --or-clair:      #E4C766;
+  --bordeaux:      #8B2635;
+  --bordeaux-fonce:#6E1E2A;
+  --vert:          #2F6844;
+  --vert-clair:    #E7F0E9;
+  --gris-texte:    #6B6B63;
+  --ligne:         #E1DACB;
+  --blanc:         #FFFFFF;
+  --danger-fond:   #FBEAE9;
+  --danger-texte:  #8B2635;
+
+  /* Typo */
+  --font-display: 'Fraunces', serif;
+  --font-corps:   'Inter', sans-serif;
+
+  /* Rayon / ombre */
+  --radius: 10px;
+  --radius-sm: 6px;
+  --ombre: 0 4px 20px rgba(28,37,65,0.08);
+  --ombre-forte: 0 12px 40px rgba(28,37,65,0.16);
+}
+
+*{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+
+body{
+  margin:0;
+  background: var(--papier);
+  color: var(--encre);
+  font-family: var(--font-corps);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,h2,h3,.display{
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 .4em 0;
+  color: var(--encre);
+}
+
+p{ margin: 0 0 1em 0; color: var(--encre-douce); }
+
+a{ color: var(--bordeaux); }
+
+button, input, select, textarea{ font-family: inherit; font-size: 1rem; }
+
+/* Focus visible clavier */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{
+  outline: 3px solid var(--or);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
+
+/* ---------- Layout utilitaires ---------- */
+.container{ max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+.center-screen{ min-height: 100vh; display:flex; align-items:center; justify-content:center; padding: 32px 16px; }
+.stack{ display:flex; flex-direction:column; gap: 16px; }
+.hidden{ display:none !important; }
+
+/* ---------- En-tête institutionnel ---------- */
+.topbar{
+  border-bottom: 1px solid var(--ligne);
+  background: var(--papier);
+}
+.topbar-inner{
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 18px 24px; max-width: 1080px; margin: 0 auto;
+}
+.brand{ display:flex; align-items:center; gap:12px; text-decoration:none; }
+.brand-seal{ width:34px; height:34px; flex-shrink:0; }
+.brand-text{ font-family: var(--font-display); font-weight:600; font-size:1.15rem; color:var(--encre); }
+.brand-text small{ display:block; font-family:var(--font-corps); font-weight:500; font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--gris-texte); }
+
+/* ---------- Sceau (signature graphique) ---------- */
+.seal{
+  --seal-color: var(--or);
+  width: 96px; height: 96px;
+  border-radius: 50%;
+  border: 3px solid var(--seal-color);
+  display:flex; align-items:center; justify-content:center;
+  position: relative;
+  color: var(--seal-color);
+  flex-shrink: 0;
+}
+.seal::before{
+  content:'';
+  position:absolute; inset: 6px;
+  border-radius: 50%;
+  border: 1px dashed var(--seal-color);
+  opacity:.6;
+}
+.seal svg{ width: 42px; height:42px; }
+.seal.seal-lg{ width:132px; height:132px; }
+.seal.seal-lg svg{ width:56px; height:56px; }
+.seal.seal-vert{ --seal-color: var(--vert); }
+
+/* ---------- Cartes de choix (accueil) ---------- */
+.gateway{ display:grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px; }
+@media (max-width: 720px){ .gateway{ grid-template-columns: 1fr; } }
+
+.gateway-card{
+  background: var(--blanc);
+  border: 1px solid var(--ligne);
+  border-radius: var(--radius);
+  padding: 36px 32px;
+  text-decoration:none;
+  display:flex; flex-direction:column; gap:14px;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.gateway-card:hover{ transform: translateY(-3px); box-shadow: var(--ombre-forte); border-color: var(--or); }
+.gateway-card .eyebrow{ font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--or); font-weight:700; }
+.gateway-card h2{ font-size:1.5rem; }
+.gateway-card p{ font-size: .95rem; }
+.gateway-card .go{ margin-top:auto; font-weight:600; color: var(--encre); display:flex; align-items:center; gap:6px; }
+.gateway-card .go svg{ width:16px; height:16px; transition: transform .18s ease; }
+.gateway-card:hover .go svg{ transform: translateX(4px); }
+
+/* ---------- Cartes / panneaux ---------- */
+.panel{
+  background: var(--blanc);
+  border: 1px solid var(--ligne);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--ombre);
+}
+.panel-narrow{ max-width: 460px; width:100%; }
+
+/* ---------- Formulaires ---------- */
+.field{ margin-bottom: 18px; }
+.field label{ display:block; font-size:.82rem; font-weight:600; color: var(--encre-douce); margin-bottom:6px; }
+.field input, .field select, .field textarea{
+  width:100%;
+  padding: 11px 13px;
+  border: 1.5px solid var(--ligne);
+  border-radius: var(--radius-sm);
+  background: var(--papier);
+  color: var(--encre);
+  transition: border-color .15s ease, background .15s ease;
+}
+.field input:focus, .field select:focus, .field textarea:focus{ border-color: var(--or); background: var(--blanc); outline:none; }
+.field textarea{ resize: vertical; min-height: 90px; }
+.hint{ font-size:.78rem; color: var(--gris-texte); margin-top:4px; }
+
+/* ---------- Boutons ---------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding: 12px 22px;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-weight:600;
+  font-size:.95rem;
+  cursor:pointer;
+  transition: transform .12s ease, box-shadow .12s ease, background .15s ease;
+  text-decoration:none;
+}
+.btn:active{ transform: translateY(1px); }
+.btn-primary{ background: var(--bordeaux); color: var(--blanc); }
+.btn-primary:hover{ background: var(--bordeaux-fonce); }
+.btn-secondary{ background: var(--encre); color: var(--blanc); }
+.btn-secondary:hover{ background: var(--encre-douce); }
+.btn-ghost{ background: transparent; color: var(--encre); border: 1.5px solid var(--ligne); }
+.btn-ghost:hover{ border-color: var(--encre); }
+.btn-block{ width:100%; }
+.btn:disabled{ opacity:.5; cursor:not-allowed; }
+.btn-danger{ background: var(--danger-texte); color:var(--blanc); }
+.btn-sm{ padding: 7px 14px; font-size:.82rem; }
+
+/* ---------- Messages ---------- */
+.alert{ padding: 12px 16px; border-radius: var(--radius-sm); font-size:.88rem; margin-bottom: 16px; }
+.alert-erreur{ background: var(--danger-fond); color: var(--danger-texte); border: 1px solid #F0C9C7; }
+.alert-succes{ background: var(--vert-clair); color: var(--vert); border: 1px solid #C9E3D1; }
+
+/* ---------- Étapes (processus réel : identification -> vote -> confirmation) ---------- */
+.steps{ display:flex; gap: 10px; align-items:center; margin-bottom: 32px; justify-content:center; }
+.step{ display:flex; align-items:center; gap:8px; font-size:.82rem; color: var(--gris-texte); }
+.step-num{ width:24px; height:24px; border-radius:50%; border:1.5px solid var(--ligne); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.75rem; }
+.step.active .step-num{ border-color: var(--or); background: var(--or); color: var(--blanc); }
+.step.active{ color: var(--encre); font-weight:600; }
+.step.done .step-num{ border-color: var(--vert); background: var(--vert); color:var(--blanc); }
+.step-sep{ width: 28px; height:1px; background: var(--ligne); }
+
+/* ---------- Candidats (vote) ---------- */
+.candidats-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 16px; margin: 24px 0; }
+.candidat-card{
+  border: 2px solid var(--ligne);
+  border-radius: var(--radius);
+  background: var(--blanc);
+  padding: 20px;
+  cursor:pointer;
+  text-align:center;
+  transition: border-color .15s ease, transform .12s ease;
+}
+.candidat-card:hover{ transform: translateY(-2px); }
+.candidat-card.selected{ border-color: var(--bordeaux); background: #FBF3F1; }
+.candidat-photo{
+  width: 76px; height: 76px; border-radius:50%;
+  background: var(--papier-ombre);
+  margin: 0 auto 12px auto;
+  display:flex; align-items:center; justify-content:center;
+  font-family: var(--font-display); font-size:1.6rem; font-weight:600; color: var(--encre-douce);
+  overflow:hidden;
+}
+.candidat-photo img{ width:100%; height:100%; object-fit:cover; }
+.candidat-nom{ font-weight:700; margin-bottom:4px; }
+.candidat-desc{ font-size:.82rem; color: var(--gris-texte); }
+.candidat-check{ margin-top:12px; font-size:.78rem; font-weight:700; color: var(--bordeaux); visibility:hidden; }
+.candidat-card.selected .candidat-check{ visibility:visible; }
+
+/* ---------- Admin : shell ---------- */
+.admin-shell{ display:flex; min-height:100vh; }
+.admin-side{
+  width: 240px; flex-shrink:0;
+  background: var(--encre); color: var(--blanc);
+  padding: 26px 18px; display:flex; flex-direction:column; gap: 6px;
+}
+.admin-side .brand-text, .admin-side .brand-text small{ color: var(--blanc); }
+.admin-side .brand-text small{ color: #A9B0C6; }
+.admin-nav{ margin-top: 30px; display:flex; flex-direction:column; gap:4px; }
+.admin-nav button{
+  text-align:left; background:transparent; border:none; color:#C9CEDD;
+  padding: 11px 14px; border-radius: var(--radius-sm); cursor:pointer; font-weight:600; font-size:.9rem;
+  display:flex; align-items:center; gap:10px;
+}
+.admin-nav button:hover{ background: rgba(255,255,255,.06); color:var(--blanc); }
+.admin-nav button.active{ background: var(--or); color: var(--encre); }
+.admin-logout{ margin-top:auto; }
+.admin-main{ flex:1; padding: 34px 40px; max-width: 1100px; }
+.admin-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom: 26px; flex-wrap:wrap; gap:12px; }
+
+.badge{ display:inline-flex; align-items:center; gap:6px; padding:4px 12px; border-radius: 999px; font-size:.76rem; font-weight:700; letter-spacing:.03em; }
+.badge-ouverte{ background: var(--vert-clair); color: var(--vert); }
+.badge-fermee{ background: var(--danger-fond); color: var(--danger-texte); }
+.badge-brouillon{ background: var(--papier-ombre); color: var(--gris-texte); }
+
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+/* ---------- Tableaux ---------- */
+.table-wrap{ background: var(--blanc); border:1px solid var(--ligne); border-radius: var(--radius); overflow:hidden; }
+table{ width:100%; border-collapse:collapse; font-size:.9rem; }
+th{ text-align:left; background: var(--papier-ombre); padding: 12px 16px; font-size:.75rem; text-transform:uppercase; letter-spacing:.05em; color: var(--gris-texte); }
+td{ padding: 12px 16px; border-top: 1px solid var(--ligne); }
+tr:hover td{ background: var(--papier); }
+
+.toolbar{ display:flex; gap:10px; align-items:center; margin-bottom:18px; flex-wrap:wrap; }
+.toolbar input[type="text"], .toolbar input[type="search"]{
+  padding:9px 12px; border:1.5px solid var(--ligne); border-radius:var(--radius-sm); background:var(--blanc); min-width:220px;
+}
+
+/* ---------- Cartes stats résultats ---------- */
+.stats-row{ display:grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap:16px; margin-bottom: 26px; }
+.stat-card{ background: var(--blanc); border:1px solid var(--ligne); border-radius: var(--radius); padding: 18px 20px; }
+.stat-card .num{ font-family: var(--font-display); font-size: 1.9rem; font-weight:600; color:var(--encre); }
+.stat-card .label{ font-size:.78rem; color: var(--gris-texte); text-transform:uppercase; letter-spacing:.04em; }
+
+.result-row{ margin-bottom: 18px; }
+.result-row-head{ display:flex; justify-content:space-between; font-size:.9rem; margin-bottom:6px; }
+.result-row-head .nom{ font-weight:700; }
+.result-bar-track{ height: 12px; background: var(--papier-ombre); border-radius: 999px; overflow:hidden; }
+.result-bar-fill{ height:100%; background: linear-gradient(90deg, var(--or), var(--bordeaux)); border-radius:999px; transition: width .6s ease; }
+.winner-tag{ font-size:.7rem; font-weight:700; color: var(--vert); text-transform:uppercase; letter-spacing:.05em; margin-left:8px; }
+
+/* ---------- Modal ---------- */
+.modal-overlay{
+  position:fixed; inset:0; background: rgba(28,37,65,.55);
+  display:flex; align-items:center; justify-content:center; padding:20px; z-index:50;
+}
+.modal{ background:var(--blanc); border-radius: var(--radius); padding: 30px; max-width: 420px; width:100%; box-shadow: var(--ombre-forte); }
+.modal-actions{ display:flex; gap:10px; margin-top: 22px; }
+
+/* ---------- Confirmation ---------- */
+.confirmation{ text-align:center; max-width: 480px; }
+.confirmation .seal{ margin: 0 auto 26px auto; }
+
+/* ---------- Empty state ---------- */
+.empty{ text-align:center; padding: 50px 20px; color: var(--gris-texte); }
+
+footer.foot{ text-align:center; padding: 30px 16px; font-size:.78rem; color: var(--gris-texte); }

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tableau de bord — Scrutin</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="admin-shell">
+
+  <aside class="admin-side">
+    <div class="brand">
+      <svg class="brand-seal" viewBox="0 0 40 40" fill="none" style="width:28px;height:28px;">
+        <circle cx="20" cy="20" r="18" stroke="#C9A227" stroke-width="2.4"/>
+        <path d="M14 20l4 4 8-9" stroke="#8B2635" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="brand-text">Scrutin<small id="email-connecte">…</small></span>
+    </div>
+
+    <nav class="admin-nav">
+      <button data-tab="election" class="active">Élection</button>
+      <button data-tab="candidats">Candidats</button>
+      <button data-tab="electeurs">Liste électorale</button>
+      <button data-tab="resultats">Résultats</button>
+    </nav>
+
+    <div class="admin-logout">
+      <button id="btn-deconnexion" class="btn btn-ghost btn-block" style="color:#fff;border-color:rgba(255,255,255,.25);">Se déconnecter</button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+
+    <!-- ===== Onglet Élection ===== -->
+    <section class="tab-panel active" id="tab-election">
+      <div class="admin-header">
+        <h2>Configuration de l'élection</h2>
+        <span class="badge badge-brouillon" id="badge-statut">Brouillon</span>
+      </div>
+
+      <div id="alerte-election" class="alert alert-erreur hidden"></div>
+
+      <div class="panel" style="max-width:640px;">
+        <div class="field">
+          <label for="e-titre">Titre de l'élection</label>
+          <input type="text" id="e-titre" placeholder="Ex : Élection du bureau des étudiants 2026">
+        </div>
+        <div class="field">
+          <label for="e-description">Description (affichée aux électeurs)</label>
+          <textarea id="e-description" placeholder="Contexte, consignes, période de vote…"></textarea>
+        </div>
+        <button class="btn btn-secondary" id="btn-enregistrer-election">Enregistrer</button>
+      </div>
+
+      <div class="panel" style="max-width:640px; margin-top:20px;">
+        <h3 style="font-size:1.05rem;">Statut du scrutin</h3>
+        <p style="font-size:.88rem;">Ouvrez le scrutin pour permettre aux électeurs de voter. Fermez-le pour verrouiller définitivement les résultats.</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-primary" id="btn-ouvrir">Ouvrir le scrutin</button>
+          <button class="btn btn-danger" id="btn-fermer">Fermer le scrutin</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Onglet Candidats ===== -->
+    <section class="tab-panel" id="tab-candidats">
+      <div class="admin-header"><h2>Candidats</h2></div>
+
+      <div class="panel" style="max-width:640px; margin-bottom:24px;">
+        <h3 style="font-size:1rem;">Ajouter un candidat</h3>
+        <div class="field">
+          <label for="c-nom">Nom</label>
+          <input type="text" id="c-nom">
+        </div>
+        <div class="field">
+          <label for="c-description">Description / programme (facultatif)</label>
+          <textarea id="c-description"></textarea>
+        </div>
+        <div class="field">
+          <label for="c-photo">URL de la photo (facultatif)</label>
+          <input type="text" id="c-photo" placeholder="https://…">
+        </div>
+        <button class="btn btn-secondary" id="btn-ajouter-candidat">Ajouter le candidat</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Candidat</th><th>Description</th><th>Voix</th><th></th></tr></thead>
+          <tbody id="liste-candidats-admin"></tbody>
+        </table>
+      </div>
+      <div class="empty hidden" id="candidats-vide">Aucun candidat pour l'instant.</div>
+    </section>
+
+    <!-- ===== Onglet Électeurs ===== -->
+    <section class="tab-panel" id="tab-electeurs">
+      <div class="admin-header">
+        <h2>Liste électorale</h2>
+        <span class="hint" id="compte-electeurs"></span>
+      </div>
+
+      <div class="panel" style="margin-bottom:24px;">
+        <h3 style="font-size:1rem;">Ajouter un électeur</h3>
+        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr auto; gap:10px; align-items:end;">
+          <div class="field" style="margin:0;"><label for="v-nom">Nom</label><input type="text" id="v-nom"></div>
+          <div class="field" style="margin:0;"><label for="v-prenom">Prénom</label><input type="text" id="v-prenom"></div>
+          <div class="field" style="margin:0;"><label for="v-cin">Numéro CIN</label><input type="text" id="v-cin"></div>
+          <button class="btn btn-secondary" id="btn-ajouter-electeur">Ajouter</button>
+        </div>
+        <div id="alerte-electeur" class="alert alert-erreur hidden" style="margin-top:14px;"></div>
+
+        <details style="margin-top:18px;">
+          <summary style="cursor:pointer; font-size:.88rem; font-weight:600; color:var(--encre-douce);">Import groupé</summary>
+          <p class="hint" style="margin-top:10px;">Une ligne par électeur, format : <code>Nom;Prénom;CIN</code></p>
+          <textarea id="import-texte" rows="5" style="width:100%; padding:11px 13px; border:1.5px solid var(--ligne); border-radius:6px; font-family:monospace; font-size:.85rem;" placeholder="DIOP;Fatou;1234567890123&#10;NDIAYE;Moussa;9876543210987"></textarea>
+          <button class="btn btn-ghost btn-sm" id="btn-import" style="margin-top:10px;">Importer la liste</button>
+        </details>
+      </div>
+
+      <div class="toolbar">
+        <input type="search" id="recherche-electeurs" placeholder="Rechercher par nom, prénom ou CIN…">
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Nom</th><th>Prénom</th><th>CIN</th><th>Statut</th><th></th></tr></thead>
+          <tbody id="liste-electeurs-admin"></tbody>
+        </table>
+      </div>
+      <div class="empty hidden" id="electeurs-vide">Aucun électeur inscrit pour l'instant.</div>
+    </section>
+
+    <!-- ===== Onglet Résultats ===== -->
+    <section class="tab-panel" id="tab-resultats">
+      <div class="admin-header"><h2>Résultats</h2></div>
+
+      <div class="stats-row">
+        <div class="stat-card"><div class="num" id="stat-inscrits">0</div><div class="label">Inscrits</div></div>
+        <div class="stat-card"><div class="num" id="stat-votants">0</div><div class="label">Votants</div></div>
+        <div class="stat-card"><div class="num" id="stat-participation">0%</div><div class="label">Participation</div></div>
+      </div>
+
+      <div class="panel" id="zone-resultats"></div>
+    </section>
+
+  </main>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/admin-dashboard.js"></script>
+</body>
+</html>

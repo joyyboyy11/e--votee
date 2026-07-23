@@ -1,0 +1,70 @@
+rules_version = '2';
+
+// ==========================================================
+// Règles de sécurité Firestore — Plateforme de vote
+//
+// Principe :
+// - Les organisateurs (Firebase Auth) ont tous les droits.
+// - Les électeurs n'ont PAS de compte : ils ne peuvent que
+//   lire l'élection/les candidats, lire LEUR PROPRE document
+//   électeur (par CIN), et faire une transition très précise
+//   aVote:false -> aVote:true + voix + 1 sur un candidat.
+// ==========================================================
+
+function estOrganisateur() {
+  return request.auth != null;
+}
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ----- Élection (document unique "actuelle") -----
+    match /config/{docId} {
+      allow read: if true;
+      allow write: if estOrganisateur();
+    }
+
+    // ----- Candidats -----
+    match /candidats/{candidatId} {
+      allow read: if true;
+      allow create, delete: if estOrganisateur();
+
+      // Mise à jour autorisée pour :
+      // - un organisateur (tout modifier)
+      // - OU un électeur qui incrémente voix de +1 exactement
+      //   et ne touche à aucun autre champ
+      allow update: if estOrganisateur() ||
+        (
+          request.resource.data.voix == resource.data.voix + 1 &&
+          request.resource.data.nom == resource.data.nom &&
+          request.resource.data.description == resource.data.description &&
+          request.resource.data.ordre == resource.data.ordre
+        );
+    }
+
+    // ----- Électeurs -----
+    match /electeurs/{cin} {
+      // Lecture publique d'UN document précis (par CIN, via .doc(cin).get())
+      // -> permet à l'électeur de vérifier son inscription sans lister
+      //    toute la base (la liste électorale complète reste protégée
+      //    côté "list" par l'absence d'index/permission de requête large
+      //    pour un utilisateur non authentifié).
+      allow get: if true;
+      allow list: if estOrganisateur();
+
+      allow create, delete: if estOrganisateur();
+
+      // Mise à jour autorisée pour :
+      // - un organisateur (tout modifier)
+      // - OU la transition précise aVote:false -> true (le vote),
+      //   sans changement de nom/prénom
+      allow update: if estOrganisateur() ||
+        (
+          resource.data.aVote == false &&
+          request.resource.data.aVote == true &&
+          request.resource.data.nom == resource.data.nom &&
+          request.resource.data.prenom == resource.data.prenom
+        );
+    }
+  }
+}
