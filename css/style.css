@@ -81,12 +81,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
 /* ---------- En-tête institutionnel ---------- */
 .topbar{
+  position: sticky; top: 0; z-index: 40;
   border-bottom: 1px solid var(--ligne);
-  background: var(--papier);
+  background: rgba(250,247,240,0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 .topbar-inner{
-  display:flex; align-items:center; justify-content:space-between;
-  padding: 18px 24px; max-width: 1080px; margin: 0 auto;
+  display:flex; align-items:center; justify-content:space-between; gap:20px;
+  padding: 14px 24px; max-width: 1080px; margin: 0 auto;
 }
 .brand{ display:flex; align-items:center; gap:12px; text-decoration:none; }
 .brand-seal{ width:34px; height:34px; flex-shrink:0; }
@@ -96,15 +99,21 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 /* ---------- Navigation du topbar ---------- */
 .topbar-nav{ display:flex; align-items:center; gap:2px; flex-wrap:wrap; }
 .topbar-nav a{
-  padding:8px 14px; border-radius:999px; font-size:.85rem; font-weight:600;
+  display:flex; align-items:center; gap:7px;
+  padding:9px 16px; border-radius:999px; font-size:.85rem; font-weight:600;
   color:var(--encre-douce); text-decoration:none; white-space:nowrap;
-  transition: background .15s ease, color .15s ease;
+  border: 1px solid transparent;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
 }
-.topbar-nav a:hover{ background:var(--papier-ombre); color:var(--encre); }
-.topbar-nav a.active{ background:var(--bordeaux); color:var(--blanc); }
-@media (max-width: 720px){
-  .topbar-inner{ flex-wrap:wrap; row-gap:10px; }
-  .topbar-nav{ width:100%; justify-content:center; }
+.topbar-nav a .nav-icon{ width:15px; height:15px; flex-shrink:0; opacity:.75; }
+.topbar-nav a:hover{ background:var(--papier-ombre); color:var(--encre); border-color: var(--ligne); }
+.topbar-nav a:hover .nav-icon{ opacity:1; }
+.topbar-nav a.active{ background: var(--bordeaux); color:var(--blanc); box-shadow: 0 3px 10px rgba(139,38,53,.28); }
+.topbar-nav a.active .nav-icon{ opacity:1; }
+@media (max-width: 780px){
+  .topbar-inner{ flex-wrap:wrap; row-gap:10px; padding: 14px 18px; }
+  .topbar-nav{ width:100%; justify-content:center; gap:6px; }
+  .topbar-nav a{ padding:8px 12px; font-size:.8rem; }
 }
 
 /* ---------- Sceau (signature graphique) ---------- */
@@ -143,6 +152,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
 .gateway-card:hover{ transform: translateY(-3px); box-shadow: var(--ombre-forte); border-color: var(--or); }
+.gateway-card .icon{
+  width:44px; height:44px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  background: var(--papier-ombre); color: var(--bordeaux);
+}
+.gateway-card .icon svg{ width:21px; height:21px; }
 .gateway-card .eyebrow{ font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--or); font-weight:700; }
 .gateway-card h2{ font-size:1.5rem; }
 .gateway-card p{ font-size: .95rem; }
@@ -258,6 +273,19 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 .admin-nav button:hover{ background: rgba(255,255,255,.06); color:var(--blanc); }
 .admin-nav button.active{ background: var(--or); color: var(--encre); }
+
+.admin-public-nav{ margin-top: 22px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.1); display:flex; flex-direction:column; gap:2px; }
+.admin-public-nav .label{ font-size:.68rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#7B84A0; padding: 0 14px 8px 14px; }
+.admin-public-nav a{
+  text-decoration:none; color:#C9CEDD;
+  padding: 9px 14px; border-radius: var(--radius-sm); font-weight:600; font-size:.85rem;
+  display:flex; align-items:center; gap:10px;
+  transition: background .15s ease, color .15s ease;
+}
+.admin-public-nav a .nav-icon{ width:15px; height:15px; flex-shrink:0; opacity:.7; }
+.admin-public-nav a:hover{ background: rgba(255,255,255,.06); color:var(--blanc); }
+.admin-public-nav a:hover .nav-icon{ opacity:1; }
+
 .admin-logout{ margin-top:auto; }
 .admin-main{ flex:1; padding: 34px 40px; max-width: 1100px; }
 .admin-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom: 26px; flex-wrap:wrap; gap:12px; }
