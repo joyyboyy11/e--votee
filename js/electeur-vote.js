@@ -21,6 +21,11 @@ async function initialiser() {
       db.collection("electeurs").doc(cin).get()
     ]);
 
+    if (electionSnap.exists && electionSnap.data().statut === "fermee") {
+      sessionStorage.removeItem("scrutin_electeur_cin");
+      window.location.href = "resultats.html";
+      return;
+    }
     if (!electionSnap.exists || electionSnap.data().statut !== "ouverte") {
       rediriger("Le scrutin n'est plus ouvert.");
       return;
@@ -127,6 +132,10 @@ async function enregistrerVote() {
     if (err.message === "SCRUTIN_FERME") msg = "Le scrutin a été fermé pendant votre vote.";
     afficherAlerte("alerte", msg);
     window.scrollTo({ top: 0, behavior: "smooth" });
+    if (err.message === "SCRUTIN_FERME") {
+      sessionStorage.removeItem("scrutin_electeur_cin");
+      setTimeout(() => window.location.href = "resultats.html", 2200);
+    }
   } finally {
     btn.disabled = false;
     btn.textContent = "Je confirme";
