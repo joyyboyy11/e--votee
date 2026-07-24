@@ -5,13 +5,13 @@
 // > "Vos applications" > SDK config).
 // ==========================================================
 const firebaseConfig = {
-  apiKey: "AIzaSyCmXH6GfkqsN8gTt0heNGpTRNp1e_uaQNU",
-  authDomain: "nbapple-3f0ce.firebaseapp.com",
-  projectId: "nbapple-3f0ce",
-  storageBucket: "nbapple-3f0ce.firebasestorage.app",
-  messagingSenderId: "401275393539",
-  appId: "1:401275393539:web:4a9791abbaf7faffc32036",
-  measurementId: "G-TXSWB47DM4"
+  apiKey: "AIzaSyCOETQUnP1HWiKV-nw2YhEgkzWWVju17rI",
+  authDomain: "e--votee.firebaseapp.com",
+  projectId: "e--votee",
+  storageBucket: "e--votee.firebasestorage.app",
+  messagingSenderId: "916221538672",
+  appId: "1:916221538672:web:fe002d81d421ac68bd9fb5",
+  measurementId: "G-0S6JFMVFWM"
 };
 
 // Initialisation (SDK compat, chargé en <script> dans les pages HTML)
