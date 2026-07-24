@@ -93,6 +93,20 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .brand-text{ font-family: var(--font-display); font-weight:600; font-size:1.15rem; color:var(--encre); }
 .brand-text small{ display:block; font-family:var(--font-corps); font-weight:500; font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--gris-texte); }
 
+/* ---------- Navigation du topbar ---------- */
+.topbar-nav{ display:flex; align-items:center; gap:2px; flex-wrap:wrap; }
+.topbar-nav a{
+  padding:8px 14px; border-radius:999px; font-size:.85rem; font-weight:600;
+  color:var(--encre-douce); text-decoration:none; white-space:nowrap;
+  transition: background .15s ease, color .15s ease;
+}
+.topbar-nav a:hover{ background:var(--papier-ombre); color:var(--encre); }
+.topbar-nav a.active{ background:var(--bordeaux); color:var(--blanc); }
+@media (max-width: 720px){
+  .topbar-inner{ flex-wrap:wrap; row-gap:10px; }
+  .topbar-nav{ width:100%; justify-content:center; }
+}
+
 /* ---------- Sceau (signature graphique) ---------- */
 .seal{
   --seal-color: var(--or);
@@ -117,8 +131,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .seal.seal-vert{ --seal-color: var(--vert); }
 
 /* ---------- Cartes de choix (accueil) ---------- */
-.gateway{ display:grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px; }
-@media (max-width: 720px){ .gateway{ grid-template-columns: 1fr; } }
+.gateway{ display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-top: 40px; }
 
 .gateway-card{
   background: var(--blanc);
